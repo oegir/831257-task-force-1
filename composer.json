@@ -1,0 +1,17 @@
+{
+    "name": "shkarov/831257-task-force-1",
+    "description": "Ad exchange",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Boris Shkarov",
+            "email": "b.shkarov@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "TaskForce\\": "src/"
+        }
+    }
+}
