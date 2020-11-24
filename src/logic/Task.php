@@ -6,28 +6,14 @@ namespace TaskForce\logic;
  * Класс для описания бизнес-логики биржи объявлений
  *
  */
-
 class Task
 {
-    /**
-     * @var string STATUS_NEW статус объекта 'Новое'
-     * @var string STATUS_CANCELED статус объекта 'Отменено'
-     * @var string STATUS_WORK статус объекта 'В работе'
-     * @var string STATUS_DONE статус объекта 'Выполнено'
-     * @var string STATUS_FAILED статус объекта 'Провалено'
-     */
     const STATUS_NEW = 'new';
     const STATUS_CANCELED = 'canceled';
     const STATUS_WORK = 'work';
     const STATUS_DONE = 'done';
     const STATUS_FAILED = 'failed';
 
-    /**
-     * @var string ACTION_CANCEL действие 'Отмененить'
-     * @var string ACTION_COMPLETE действие 'Выполнено'
-     * @var string ACTION_RESPOND действие 'Откликнуться'
-     * @var string ACTION_REFUSE действие 'Отказаться'
-     */
     const ACTION_CANCEL = 'cancel';
     const ACTION_COMPLETE = 'complete';
     const ACTION_RESPOND = 'respond';
@@ -47,7 +33,6 @@ class Task
      * @var int $id_builder id исполнителя
      */
     private int $id_builder;
-
 
     public function __construct($id_customer, $id_builder)
     {
@@ -91,7 +76,7 @@ class Task
      *
      * @param string $action Действие над объектом
      *
-     * @return string or null
+     * @return string|null
      */
     public function getNextStatus( string $action) : ?string
     {
@@ -116,7 +101,7 @@ class Task
      * @param string $status  Cтатус объекта
      * @param int    $id_user id пользователя, совершившающего действие над объектом
      *
-     * @return string or null
+     * @return string|null
      */
     public function getAvaliableAction(string $status, int $id_user) : ?string
     {
