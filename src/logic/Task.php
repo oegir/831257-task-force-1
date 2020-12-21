@@ -27,12 +27,12 @@ class Task
     /**
      * @var int $id_customer id заказчика
      */
-    private int $id_customer;
+    //private int $id_customer;
 
     /**
      * @var int $id_builder id исполнителя
      */
-    private int $id_builder;
+    //private int $id_builder;
 
     public function __construct($id_customer, $id_builder)
     {
@@ -101,26 +101,36 @@ class Task
      * @param string $status  Cтатус объекта
      * @param int    $id_user id пользователя, совершившающего действие над объектом
      *
-     * @return string|null
+     * @return object|null Объект-действие
      */
-    public function getAvaliableAction(string $status, int $id_user) : ?string
+    public function getAvaliableAction(string $status, int $id_user) : object
     {
         if ($status === self::STATUS_NEW) {
-            if ($id_user === $this->id_customer) {
-                return self::ACTION_CANCEL;
+            $obj = new ActionCancel();
+            if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
+                return $obj;
             }
-            if ($id_user === $this->id_builder) {
-                return self::ACTION_RESPOND;
+            unset($obj);
+
+            $obj = new ActionRespond();
+            if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
+                return $obj;
             }
+
             return null;
         }
         if ($status === self::STATUS_WORK) {
-            if ($id_user === $this->id_customer) {
-                return self::ACTION_COMPLETE;
+            $obj = new ActionComplete();
+            if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
+                return $obj;
             }
-            if ($id_user === $this->id_builder) {
-                return self::ACTION_REFUSE;
+            unset($obj);
+
+            $obj = new ActionRefuse();
+            if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
+                return $obj;
             }
+
             return null;
         }
         return null;
