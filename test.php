@@ -35,13 +35,8 @@ $Task1->status = Task::STATUS_WORK;
 assert($Task1->getNextStatus('complete') == Task::STATUS_DONE, 'Warning: complete action');
 assert($Task1->getNextStatus('refuse') == Task::STATUS_FAILED, 'Warning: refuse action');
 
-$objCancel = new ActionCancel();
-$objRespond = new ActionRespond();
-$objComplete = new ActionComplete();
-$objRefuse= new ActionRefuse();
+assert($Task1->getAvaliableAction('new', 1)->getInternalName() == Task::ACTION_CANCEL, 'Warning: cancel action');
+assert($Task1->getAvaliableAction('new', 2)->getInternalName() == Task::ACTION_RESPOND, 'Warning: respond action');
 
-assert($Task1->getAvaliableAction('new', 1) == $objCancel->isAvailable(1,1,2), 'Warning: cancel action');
-assert($Task1->getAvaliableAction('new', 2) == $objRespond->isAvailable(2,1,2), 'Warning: respond action');
-
-assert($Task1->getAvaliableAction('work', 1) == $objComplete->isAvailable(1,1,2), 'Warning: complete action');
-assert($Task1->getAvaliableAction('work', 2) == $objRefuse->isAvailable(2,1,2), 'Warning: refuse action');
+assert($Task1->getAvaliableAction('work', 1)->getInternalName() == Task::ACTION_COMPLETE, 'Warning: complete action');
+assert($Task1->getAvaliableAction('work', 2)->getInternalName() == Task::ACTION_REFUSE, 'Warning: refuse action');

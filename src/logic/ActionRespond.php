@@ -8,17 +8,17 @@ namespace TaskForce\logic;
  */
 class ActionRespond extends Action
 {
-    public function getActionName()
+    public function getName() : string
     {
         return 'Откликнуться';
     }
 
-    public function getActionInternalName()
+    public function getInternalName() : string
     {
-        return 'respond';
+        return Task::ACTION_RESPOND;
     }
 
-    public function isAvailable($id_user, $id_customer, $id_builder)
+    public function isAvailable(int $id_user, int $id_customer, int $id_builder) : bool
     {
         return $id_user === $id_builder;
     }

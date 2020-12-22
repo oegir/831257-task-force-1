@@ -8,9 +8,30 @@ namespace TaskForce\logic;
  */
 abstract class Action
 {
-    abstract public function getActionName();
+    /**
+     * Вернуть имя действия
+     * пример: 'Отмененить'
+     *
+     * @return string
+     */
+    abstract public function getName() : string;
 
-    abstract public function getActionInternalName();
+    /**
+     * Вернуть внутреннее имя действия
+     * пример: 'cancel'
+     *
+     * @return string
+     */
+    abstract public function getInternalName() : string;
 
-    abstract public function isAvailable($id_user, $id_customer, $id_builder);
+    /**
+     * Проверка доступности действия для указанного пользователя
+     *
+     * @param int $id_user     id пользователя, совершающего действие над объектом
+     * @param int $id_customer id заказчика
+     * @param int $id_builder  id исполнителя
+     *
+     * @return bool
+     */
+    abstract public function isAvailable(int $id_user, int $id_customer, int $id_builder) : bool;
 }

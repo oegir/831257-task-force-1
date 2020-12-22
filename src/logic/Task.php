@@ -27,12 +27,12 @@ class Task
     /**
      * @var int $id_customer id заказчика
      */
-    //private int $id_customer;
+    private $id_customer;
 
     /**
      * @var int $id_builder id исполнителя
      */
-    //private int $id_builder;
+    private $id_builder;
 
     public function __construct($id_customer, $id_builder)
     {
@@ -99,11 +99,11 @@ class Task
      * Вернуть доступное действие для указанного статуса
      *
      * @param string $status  Cтатус объекта
-     * @param int    $id_user id пользователя, совершившающего действие над объектом
+     * @param int    $id_user id пользователя, совершающего действие над объектом
      *
-     * @return object|null Объект-действие
+     * @return Action|null Объект-действие
      */
-    public function getAvaliableAction(string $status, int $id_user) : object
+    public function getAvaliableAction(string $status, int $id_user) : ?Action
     {
         if ($status === self::STATUS_NEW) {
             $obj = new ActionCancel();

@@ -8,17 +8,17 @@ namespace TaskForce\logic;
  */
 class ActionComplete extends Action
 {
-    public function getActionName()
+    public function getName() : string
     {
         return 'Выполнено';
     }
 
-    public function getActionInternalName()
+    public function getInternalName() : string
     {
-        return 'complete';
+        return Task::ACTION_COMPLETE;
     }
 
-    public function isAvailable($id_user, $id_customer, $id_builder)
+    public function isAvailable(int $id_user, int $id_customer, int $id_builder) : bool
     {
         return $id_user === $id_customer;
     }
