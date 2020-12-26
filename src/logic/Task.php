@@ -2,6 +2,8 @@
 
 namespace TaskForce\logic;
 
+use TaskForce\ex\TaskArgumentsExeption;
+
 /**
  * Класс для описания бизнес-логики биржи объявлений
  *
@@ -34,7 +36,7 @@ class Task
      */
     private $id_builder;
 
-    public function __construct($id_customer, $id_builder)
+    public function __construct(int $id_customer, int $id_builder)
     {
         $this->id_customer = $id_customer;
         $this->id_builder = $id_builder;
@@ -45,7 +47,7 @@ class Task
      *
      * @return array
      */
-    public function getStatusesMap() : array
+    public static function getStatusesMap() : array
     {
         return [
             self::STATUS_NEW => 'Новое',
@@ -61,7 +63,7 @@ class Task
      *
      * @return array
      */
-    public function getActionsMap() : array
+    public static function getActionsMap() : array
     {
         return [
             self::ACTION_CANCEL => 'Отмененить',
@@ -76,10 +78,13 @@ class Task
      *
      * @param string $action Действие над объектом
      *
-     * @return string|null
+     * @return string
      */
-    public function getNextStatus( string $action) : ?string
+    public function getNextStatus( string $action) : string
     {
+        if (!self::validateAction($action)) {
+            throw new TaskArgumentsExeption("Задано некорректное действие над заданием");
+        }
         if ($action === self::ACTION_CANCEL) {
             return self::STATUS_CANCELED;
         }
@@ -92,7 +97,6 @@ class Task
         if ($action === self::ACTION_REFUSE) {
             return self::STATUS_FAILED;
         }
-        return null;
     }
 
     /**
@@ -101,10 +105,17 @@ class Task
      * @param string $status  Cтатус объекта
      * @param int    $id_user id пользователя, совершающего действие над объектом
      *
-     * @return Action|null Объект-действие
+     * @return Action Объект-действие
      */
-    public function getAvaliableAction(string $status, int $id_user) : ?Action
+    public function getAvaliableAction(string $status, int $id_user) : Action
     {
+        if (!self::validateStatus($status)) {
+            throw new TaskArgumentsExeption("Задан некорректный статус задания");
+        }
+        if (!$this->validateUser($id_user)) {
+            throw new TaskArgumentsExeption("Указан некорректный id пользователя");
+        }
+
         if ($status === self::STATUS_NEW) {
             $obj = new ActionCancel();
             if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
@@ -116,8 +127,6 @@ class Task
             if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
                 return $obj;
             }
-
-            return null;
         }
         if ($status === self::STATUS_WORK) {
             $obj = new ActionComplete();
@@ -130,9 +139,42 @@ class Task
             if ($obj->isAvailable($id_user, $this->id_customer, $this->id_builder)) {
                 return $obj;
             }
-
-            return null;
         }
-        return null;
+    }
+
+    /**
+     * Проверка корректности действия над заданием
+     *
+     * @param string $action Действие над заданием
+     *
+     * @return bool
+     */
+    private static function validateAction(string $action) : bool
+    {
+        return array_key_exists($action, self::getActionsMap());
+    }
+
+    /**
+     * Проверка корректности статуса задания
+     *
+     * @param string $status  Cтатус задания
+     *
+     * @return bool
+     */
+    private static function validateStatus(string $status) : bool
+    {
+        return array_key_exists($status, self::getStatusesMap());
+    }
+
+    /**
+     * Проверка корректности id пользователя
+     *
+     * @param int $id_user id пользователя
+     *
+     * @return bool
+     */
+    private function validateUser(int $id_user) : bool
+    {
+        return ($id_user === $this->id_customer || $id_user === $this->id_builder);
     }
 }
