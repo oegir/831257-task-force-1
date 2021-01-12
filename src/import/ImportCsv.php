@@ -19,6 +19,11 @@ class ImportCsv
     private $file_CSV;
 
     /**
+     * @var string $file_import имя и путь к файлу с инструкцией для записи в БД (результат импорта данных)
+     */
+    private $file_import;
+
+    /**
      * @var string $table_SQL имя таблицы БД, в которую будут записаны данные
      */
     private $table_SQL;
@@ -48,9 +53,13 @@ class ImportCsv
     }
 
     /**
-     * Импорт данных в промежуточный массив
+     * Импорт данных и их запись в текстовый файл с инструкцией SQL
+     *
+     * @param string $file_name  Путь и имя файла для записи
+     *
+     * @return bool
      */
-    public function import() : void
+    public function import(string $file_name) : bool
     {
         if (!file_exists($this->file_CSV)) {
             throw new \Exception("Файл не существует");
@@ -76,19 +85,21 @@ class ImportCsv
         $this->result = array_filter($this->result, function ($arr) {       //удаляем элемент со значением null
             return !is_null($arr[0]);
         });
+
+        $this->file_import = $file_name;
+
+        return $this->writeSQL();
     }
 
     /**
      * Запись строки с инструкцией SQL в файл
      *
-     * @param string $filename  Путь и имя файла для записи
-     *
      * @return bool
      */
-    public function writeSQL(string $filename) : bool
+    private function writeSQL() : bool
     {
         try {
-            $file = new \SplFileObject($filename, 'w');
+            $file = new \SplFileObject($this->file_import, 'w');
         }
         catch (\RuntimeException $exception) {
             throw new \Exception("Не удалось создать файл для записи");
@@ -135,7 +146,7 @@ class ImportCsv
     }
 
     /**
-     * Формирование строки с перечнем коллонок таблицы БД, в которые будут добавлены данные
+     * Формирование строки с перечнем колонок таблицы БД, в которые будут добавлены данные
      *
      * @return string
      */
@@ -179,7 +190,7 @@ class ImportCsv
                 case self::TYPE_INT:
                     return $carry. $item.",";
                 default:
-                    return $carry."'".$item."',";
+                    return $carry."'".addslashes($item)."',";
             }
         });
 
