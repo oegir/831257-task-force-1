@@ -123,7 +123,7 @@ AppAsset::register($this);
     <main class="page-main">
         <div class="main-container page-container">
 
-
+            <?= $content ?>
 
         </div>
     </main>
@@ -172,8 +172,6 @@ AppAsset::register($this);
         </div>
     </footer>
 </div>
-</body>
-</html>
 
 <?php $this->endBody() ?>
 </body>
