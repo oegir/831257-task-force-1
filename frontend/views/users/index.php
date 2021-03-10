@@ -1,23 +1,11 @@
-<?php
-
-//$builders = $this->params['builders'];
-//foreach ($builders as $builder) {
-//}
-?>
-
 <section class="user__search">
-    <?php
-      foreach ($builders as $builder) {
-          //$x=Yii::$app->formatter->asDecimal($builder->raiting, 2);
-          //$z=gettype($x);
-          //$y=$x;
-    ?>
+    <?php foreach ($builders as $builder) { ?>
         <div class="content-view__feedback-card user__search-wrapper">
           <div class="feedback-card__top">
             <div class="user__search-icon">
               <a href="user.html"><img src="./img/man-glasses.jpg" width="65" height="65"></a>
-              <span>17 заданий</span>
-              <span>6 отзывов</span>
+              <span><?= $builder->tasks_count; ?> заданий</span>
+              <span><?= $builder->opinions_count; ?> отзывов</span>
             </div>
             <div class="feedback-card__top--name user__search-card">
               <p class="link-name"><a href="user.html" class="link-regular"><?= $builder->login; ?></a></p>
@@ -27,17 +15,18 @@
                 <?= $builder->about_me; ?>
               </p>
             </div>
-            <span class="new-task__time">Был на сайте 25 минут назад</span>
+            <span class="new-task__time">Был на сайте <?= $builder->getPeriodLastVizit(); ?> назад</span>
           </div>
           <div class="link-specialization user__search-link--bottom">
-            <a href="browse.html" class="link-regular">Ремонт</a>
-            <a href="browse.html" class="link-regular">Курьер</a>
-            <a href="browse.html" class="link-regular">Оператор ПК</a>
+            <?php $categories = $builder->categories; ?>
+            <?php foreach ($categories as $category) { ?>
+                <a href="browse.html" class="link-regular"><?= $category->category; ?></a>
+            <?php } ?>
           </div>
         </div>
     <?php } ?>
 </section>
-      <section class="search-task">
+<section class="search-task">
         <div class="search-task__wrapper">
           <form class="search-task__form" name="users" method="post" action="#">
             <fieldset class="search-task__categories">
