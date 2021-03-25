@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use Yii;
-use TaskForce\date\DateInterval;
 
 /**
  * This is the model class for table "users".
@@ -210,7 +209,7 @@ class Users extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCities()
+    public function getCity()
     {
         return $this->hasOne(Cities::className(), ['id' => 'city_id']);
     }
@@ -224,8 +223,6 @@ class Users extends \yii\db\ActiveRecord
     {
         $date = is_null($this->last_activity) ? $this->date_add : $this->last_activity;
 
-        $interval = new DateInterval($date);
-
-        return $interval->getInterval();
+        return Yii::$app->formatter->asRelativeTime($date);
     }
 }

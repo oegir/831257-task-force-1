@@ -15,7 +15,7 @@
                 <?= $builder->about_me; ?>
               </p>
             </div>
-            <span class="new-task__time">Был на сайте <?= $builder->getPeriodLastVizit(); ?> назад</span>
+            <span class="new-task__time">Был на сайте <?= $builder->getPeriodLastVizit(); ?></span>
           </div>
           <div class="link-specialization user__search-link--bottom">
             <?php $categories = $builder->categories; ?>

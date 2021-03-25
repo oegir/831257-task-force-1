@@ -11,7 +11,7 @@ class TasksController extends Controller
     public function actionIndex()
     {
         $tasks = Tasks::find()
-        ->joinWith('categories')
+        ->joinWith('category')
         ->where(['status' => TaskLogic::STATUS_NEW])
         ->orderBy('date_add')
         ->all();

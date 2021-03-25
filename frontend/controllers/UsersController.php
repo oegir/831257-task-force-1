@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use yii\web\Controller;
 use frontend\models\Users;
-//use TaskForce\date\DateInterval;
 
 class UsersController extends Controller
 {

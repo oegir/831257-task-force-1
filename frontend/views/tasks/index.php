@@ -5,13 +5,13 @@
           <div class="new-task__card">
             <div class="new-task__title">
               <a href="view.html" class="link-regular"><h2><?= $task->job; ?></h2></a>
-              <a class="new-task__type link-regular" href="#"><p><?= $task->categories->category; ?></p></a>
+              <a class="new-task__type link-regular" href="#"><p><?= $task->category->category; ?></p></a>
             </div>
-            <div class="new-task__icon new-task__icon--<?= $task->categories->icon; ?>"></div>
+            <div class="new-task__icon new-task__icon--<?= $task->category->icon; ?>"></div>
             <p class="new-task_description"><?= $task->description; ?></p>
             <b class="new-task__price new-task__price--translation"><?= $task->budget; ?><b> ₽</b></b>
             <p class="new-task__place"><?= $task->address; ?></p>
-            <span class="new-task__time"><?= $task->getPeriodCreate(); ?> назад</span>
+            <span class="new-task__time"><?= $task->getPeriodCreate(); ?></span>
           </div>
         <?php } ?>
 

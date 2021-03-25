@@ -3,7 +3,6 @@
 namespace frontend\models;
 
 use Yii;
-use TaskForce\date\DateInterval;
 
 /**
  * This is the model class for table "tasks".
@@ -128,7 +127,7 @@ class Tasks extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getCategories()
+    public function getCategory()
     {
         return $this->hasOne(Categories::className(), ['id' => 'category_id']);
     }
@@ -160,8 +159,6 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getPeriodCreate() : string
     {
-        $interval = new DateInterval($this->date_add);
-
-        return $interval->getInterval();
+        return Yii::$app->formatter->asRelativeTime($this->date_add);
     }
 }

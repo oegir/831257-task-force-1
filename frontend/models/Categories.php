@@ -11,8 +11,8 @@ use Yii;
  * @property string $category Наименование категории
  * @property string|null $icon Иконка
  *
+ * @property Skills[] $skills
  * @property Tasks[] $tasks
- * @property UsersCategories[] $usersCategories
  */
 class Categories extends \yii\db\ActiveRecord
 {
@@ -48,6 +48,16 @@ class Categories extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Skills]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSkills()
+    {
+        return $this->hasMany(Skills::className(), ['category_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery
@@ -55,15 +65,5 @@ class Categories extends \yii\db\ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Tasks::className(), ['category_id' => 'id']);
-    }
-
-    /**
-     * Gets query for [[UsersCategories]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUsersCategories()
-    {
-        return $this->hasMany(UsersCategories::className(), ['category_id' => 'id']);
     }
 }
