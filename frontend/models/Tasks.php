@@ -151,4 +151,14 @@ class Tasks extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'builder_id']);
     }
+
+    /**
+     * Получить интервал между датой создания задания и текущей датой
+     *
+     * @return string
+     */
+    public function getPeriodCreate() : string
+    {
+        return Yii::$app->formatter->asRelativeTime($this->date_add);
+    }
 }

@@ -8,9 +8,10 @@ use Yii;
  * This is the model class for table "categories".
  *
  * @property int $id ID
- * @property string|null $category Категория
+ * @property string $category Наименование категории
  * @property string|null $icon Иконка
  *
+ * @property Skills[] $skills
  * @property Tasks[] $tasks
  */
 class Categories extends \yii\db\ActiveRecord
@@ -29,6 +30,7 @@ class Categories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['category'], 'required'],
             [['category', 'icon'], 'string', 'max' => 70],
         ];
     }
@@ -40,9 +42,19 @@ class Categories extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'category' => 'Категория',
+            'category' => 'Наименование категории',
             'icon' => 'Иконка',
         ];
+    }
+
+    /**
+     * Gets query for [[Skills]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSkills()
+    {
+        return $this->hasMany(Skills::className(), ['category_id' => 'id']);
     }
 
     /**

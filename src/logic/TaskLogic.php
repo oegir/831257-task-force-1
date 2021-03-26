@@ -8,7 +8,7 @@ use TaskForce\ex\TaskArgumentsExeption;
  * Класс для описания бизнес-логики биржи объявлений
  *
  */
-class Task
+class TaskLogic
 {
     const STATUS_NEW = 'new';
     const STATUS_CANCELED = 'canceled';

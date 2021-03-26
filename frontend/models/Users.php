@@ -11,22 +11,24 @@ use Yii;
  * @property string $email Электронная почта
  * @property string $login Логин
  * @property string $password Пароль
- * @property string|null $date_add Дата регистрации
- * @property int $city_id id населенного пугкта
+ * @property string|null $date_add Дата создания аккаунта
+ * @property int $city_id id населенного пункта
  * @property string|null $avatar Аватар
  * @property string|null $birthday Дата рождения
  * @property string|null $about_me О пользователе
  * @property string|null $phone Телефон
  * @property string|null $skype Skype
  * @property string|null $telegram Telegram
- * @property float|null $raiting Рейтинг
+ * @property string|null $raiting Рейтинг
  * @property string|null $last_activity Дата последней активности
- * @property int|null $is_builder Испольнитель
+ * @property int|null $is_builder Признак испольнителя
  * @property int|null $new_message Новое сообщение
- * @property int|null $task_actions Действие по заданию
+ * @property int|null $task_actions Действия по заданию
  * @property int|null $new_review Новый отзыв
  * @property int|null $show_my_contacts Показывать мои контакты только заказчику
  * @property int|null $not_show_my_profile Не показывать мой профиль
+ * @property int $tasks_count Количество выполненных заданий
+ * @property int $opinions_count Количество отзывов
  *
  * @property Favorites[] $favorites
  * @property Favorites[] $favorites0
@@ -35,6 +37,7 @@ use Yii;
  * @property Opinions[] $opinions0
  * @property Photos[] $photos
  * @property Responses[] $responses
+ * @property Skills[] $skills
  * @property Tasks[] $tasks
  * @property Tasks[] $tasks0
  * @property Cities $city
@@ -57,14 +60,14 @@ class Users extends \yii\db\ActiveRecord
         return [
             [['email', 'login', 'password', 'city_id'], 'required'],
             [['date_add', 'birthday', 'last_activity'], 'safe'],
-            [['city_id', 'is_builder', 'new_message', 'task_actions', 'new_review', 'show_my_contacts', 'not_show_my_profile'], 'integer'],
+            [['city_id', 'is_builder', 'new_message', 'task_actions', 'new_review', 'show_my_contacts', 'not_show_my_profile', 'tasks_count', 'opinions_count'], 'integer'],
             [['about_me'], 'string'],
-            [['raiting'], 'number'],
             [['email'], 'string', 'max' => 320],
             [['login', 'avatar'], 'string', 'max' => 70],
             [['password'], 'string', 'max' => 255],
             [['phone'], 'string', 'max' => 11],
             [['skype', 'telegram'], 'string', 'max' => 45],
+            [['raiting'], 'string', 'max' => 4],
             [['email'], 'unique'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
         ];
@@ -80,8 +83,8 @@ class Users extends \yii\db\ActiveRecord
             'email' => 'Электронная почта',
             'login' => 'Логин',
             'password' => 'Пароль',
-            'date_add' => 'Дата регистрации',
-            'city_id' => 'id населенного пугкта',
+            'date_add' => 'Дата создания аккаунта',
+            'city_id' => 'id населенного пункта',
             'avatar' => 'Аватар',
             'birthday' => 'Дата рождения',
             'about_me' => 'О пользователе',
@@ -90,12 +93,14 @@ class Users extends \yii\db\ActiveRecord
             'telegram' => 'Telegram',
             'raiting' => 'Рейтинг',
             'last_activity' => 'Дата последней активности',
-            'is_builder' => 'Испольнитель',
+            'is_builder' => 'Признак испольнителя',
             'new_message' => 'Новое сообщение',
-            'task_actions' => 'Действие по заданию',
+            'task_actions' => 'Действия по заданию',
             'new_review' => 'Новый отзыв',
             'show_my_contacts' => 'Показывать мои контакты только заказчику',
             'not_show_my_profile' => 'Не показывать мой профиль',
+            'tasks_count' => 'Количество выполненных заданий',
+            'opinions_count' => 'Количество отзывов',
         ];
     }
 
@@ -170,6 +175,16 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Categories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
+    {
+        return $this->hasMany(Categories::className(), ['id' => 'category_id'])->viaTable('skills', ['user_id' => 'id']);
+    }
+
+    /**
      * Gets query for [[Tasks]].
      *
      * @return \yii\db\ActiveQuery
@@ -197,5 +212,17 @@ class Users extends \yii\db\ActiveRecord
     public function getCity()
     {
         return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+    }
+
+    /**
+     * Получить интервал между датой последней активности пользователя и текущей датой
+     *
+     * @return string
+     */
+    public function getPeriodLastVizit() : string
+    {
+        $date = is_null($this->last_activity) ? $this->date_add : $this->last_activity;
+
+        return Yii::$app->formatter->asRelativeTime($date);
     }
 }

@@ -28,7 +28,7 @@ try {
 $Task1->status = Task::STATUS_NEW;
 
 assert($Task1->getNextStatus('cancel') == Task::STATUS_CANCELED, 'Warning: cancel action');
-assert($Task1->getNextStatus('respond222') == Task::STATUS_WORK, 'Warning: respond action');
+assert($Task1->getNextStatus('respond') == Task::STATUS_WORK, 'Warning: respond action');
 
 $Task1->status = Task::STATUS_WORK;
 
