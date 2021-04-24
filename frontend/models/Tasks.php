@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use DateTimeZone;
 use Yii;
 
 /**
@@ -159,6 +160,11 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getPeriodCreate() : string
     {
-        return Yii::$app->formatter->asRelativeTime($this->date_add);
+        $tz = new DateTimeZone('UTC');
+
+        //в БД дата хранится в зоне UTC
+        $date = new \DateTime($this->date_add, $tz);
+
+        return Yii::$app->formatter->asRelativeTime($date);
     }
 }

@@ -32,6 +32,7 @@ class Categories extends \yii\db\ActiveRecord
         return [
             [['category'], 'required'],
             [['category', 'icon'], 'string', 'max' => 70],
+            [['category'], 'default', 'value' => 1],
         ];
     }
 
@@ -41,9 +42,9 @@ class Categories extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'category' => 'Наименование категории',
-            'icon' => 'Иконка',
+//            'id' => 'ID',
+//            'category' => 'Наименование категории',
+//            'icon' => 'Иконка',
         ];
     }
 
