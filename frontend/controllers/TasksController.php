@@ -3,9 +3,9 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\Categories;
 use yii\web\Controller;
 use frontend\models\Tasks;
+use frontend\models\Categories;
 use frontend\models\TasksSearchForm;
 use TaskForce\logic\TaskLogic;
 
@@ -20,11 +20,7 @@ class TasksController extends Controller
 
         //формирование массива категорий вида ['id категории' => 'наименовани категории', ...]
         if (!Yii::$app->request->getIsPost()) {
-            $categories_check = [];
-            foreach ($cats as $value) {
-              $categories_check[$value->id] = 1;
-            }
-            $model_form->categories_check = $categories_check;
+            $model_form->categories_check = Categories::getCategoriesCheck();
         }
         $model_form->validate();
 
@@ -58,7 +54,7 @@ class TasksController extends Controller
 
         //фильтр Период
         if ($model_form->period_index != '4') {
-            $query->andWhere(["TO_DAYS(NOW()) - TO_DAYS(tasks.date_add)<" => $model_form->getPeriodDays()]);
+            $query->andWhere(['<=', "TO_DAYS(CURRENT_TIMESTAMP) - TO_DAYS(tasks.date_add)", $model_form->getPeriodDays()]);
         }
         //строка поиска
         $query->andFilterWhere(['like', 'job', $model_form->search])  ;

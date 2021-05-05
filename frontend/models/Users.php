@@ -221,7 +221,9 @@ class Users extends \yii\db\ActiveRecord
      */
     public function getPeriodLastVizit() : string
     {
-        $date = is_null($this->last_activity) ? $this->date_add : $this->last_activity;
+        $date_last = is_null($this->last_activity) ? $this->date_add : $this->last_activity;
+
+        $date = new \DateTime($date_last);
 
         return Yii::$app->formatter->asRelativeTime($date);
     }

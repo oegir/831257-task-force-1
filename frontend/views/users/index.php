@@ -4,8 +4,20 @@
           <div class="feedback-card__top">
             <div class="user__search-icon">
               <a href="user.html"><img src="./img/man-glasses.jpg" width="65" height="65"></a>
-              <span><?= $builder->tasks_count; ?> заданий</span>
-              <span><?= $builder->opinions_count; ?> отзывов</span>
+              <span>
+                <?=
+                    \Yii::t('app',
+                    '{n, plural, =0{# заданий} =1{# задание} one{# задание} few{# задания} many{# заданий} other{нет заданий}}',
+                    ['n' => $builder->tasks_count]);
+                ?>
+              </span>
+              <span>
+                <?=
+                    \Yii::t('app',
+                    '{n, plural, =0{# отзывов} =1{# отзыв} one{# отзыв} few{# отзывов} many{# отзывов} other{нет отзывов}}',
+                    ['n' => $builder->opinions_count]);
+                ?>
+              </span>
             </div>
             <div class="feedback-card__top--name user__search-card">
               <p class="link-name"><a href="user.html" class="link-regular"><?= $builder->login; ?></a></p>
@@ -26,55 +38,95 @@
         </div>
     <?php } ?>
 </section>
+
 <section class="search-task">
-        <div class="search-task__wrapper">
-          <form class="search-task__form" name="users" method="post" action="#">
-            <fieldset class="search-task__categories">
-              <legend>Категории</legend>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked disabled>
-                <span>Курьерские услуги</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                <span>Грузоперевозки</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Переводы</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Строительство и ремонт</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Выгул животных</span>
-              </label>
-            </fieldset>
-            <fieldset class="search-task__categories">
-              <legend>Дополнительно</legend>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Сейчас свободен</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Сейчас онлайн</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Есть отзывы</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>В избранном</span>
-              </label>
-            </fieldset>
-            <label class="search-task__name" for="110">Поиск по имени</label>
-            <input class="input-middle input" id="110" type="search" name="q" placeholder="">
+    <div class="search-task__wrapper">
+        <?php
+            use yii\widgets\ActiveForm;
+
+            $form = ActiveForm::begin([
+                'id' => 'search_tasks_id',
+                'options' => ['class' => 'search-task__form', 'name' => 'search_tasks', 'method' => 'post', 'action' => "#"]
+            ]);
+        ?>
+
+          <fieldset class="search-task__categories">
+            <legend>Категории</legend>
+
+            <?php $i = 0; ?>
+            <?php foreach ($model->categories_check as $key => $item) { ?>
+                <div>
+                <label class="checkbox__legend">
+                  <?= $form->field($model, "categories_check[$key]", ['template' => "{input}"])->checkbox([
+                     'class' => 'visually-hidden checkbox__input',
+                     'label' => null]
+                    );
+                  ?>
+                    <span><?= $cats[$i]->category ?></span>
+                </label>
+                </div>
+
+            <?php
+                    $i += 1;
+                }
+            ?>
+
+          </fieldset>
+
+          <fieldset class='search-task__categories'>
+            <legend>Дополнительно</legend>
+            <div>
+                <label class="checkbox__legend">
+                    <?= $form->field($model, 'free')->checkbox([
+                        'class' => 'visually-hidden checkbox__input',
+                        'label' => null]
+                        ); ?>
+                    <span>Сейчас свободен</span>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox__legend">
+                    <?= $form->field($model, 'online')->checkbox([
+                        'class' => 'visually-hidden checkbox__input',
+                        'label' => null]
+                        ); ?>
+                    <span>Сейчас онлайн</span>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox__legend">
+                    <?= $form->field($model, 'reviews')->checkbox([
+                        'class' => 'visually-hidden checkbox__input',
+                        'label' => null]
+                        ); ?>
+                    <span>Есть отзывы</span>
+                </label>
+            </div>
+            <div>
+                <label class="checkbox__legend">
+                    <?= $form->field($model, 'chosen')->checkbox([
+                        'class' => 'visually-hidden checkbox__input',
+                        'label' => null]
+                        ); ?>
+                    <span>В избранном</span>
+                </label>
+            </div>
+          </fieldset>
+
+            <div class="field-container">
+              <label class="search-task__name">Поиск по имени</label>
+
+              <?= $form->field($model, 'search')->textInput([
+                  'class' => "input-middle input",
+                  'type' => 'text'])
+                  ->label($label = false)?>
+
+            </div>
+
             <button class="button" type="submit">Искать</button>
-          </form>
-        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
 
 </section>
