@@ -32,7 +32,6 @@ class Categories extends \yii\db\ActiveRecord
         return [
             [['category'], 'required'],
             [['category', 'icon'], 'string', 'max' => 70],
-            [['category'], 'default', 'value' => 1],
         ];
     }
 
@@ -42,9 +41,9 @@ class Categories extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-//            'id' => 'ID',
-//            'category' => 'Наименование категории',
-//            'icon' => 'Иконка',
+            'id' => 'ID',
+            'category' => 'Наименование категории',
+            'icon' => 'Иконка',
         ];
     }
 
@@ -69,17 +68,12 @@ class Categories extends \yii\db\ActiveRecord
     }
 
     /**
-     * получение массива категорий вида ['id категории' => 'наименовани категории', ...]
+     * получение массива категорий вида ['id категории' => 'Наименование категории', ...]
      *
      * @return array
      */
-    public static function getCategoriesCheck() : array
+    public static function getCategoriesList() : array
     {
-        $cats = Categories::find()->all();
-        $categories_check = [];
-        foreach ($cats as $value) {
-            $categories_check[$value->id] = 1;
-        }
-        return $categories_check;
+        return yii\helpers\ArrayHelper::map(Categories::find()->all(), 'id', 'category');
     }
 }

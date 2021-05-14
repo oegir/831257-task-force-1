@@ -10,6 +10,11 @@ use yii\base\Model;
  */
 class TasksSearchForm extends Model
 {
+    const PERIOD_INDEX_DAY = 1;
+    const PERIOD_INDEX_WEEK = 2;
+    const PERIOD_INDEX_MONTH = 3;
+    const PERIOD_INDEX_ALL = 4;
+
     /**
      * @var string $categories_check Массив категорий, ключ - id категории, значение - наименование категории
      */
@@ -50,8 +55,8 @@ class TasksSearchForm extends Model
             ['categories_check', 'default', 'value' => []],
             ['nobuilder', 'default', 'value' => 0],
             ['remote_work', 'default', 'value' => 0],
-            ['period', 'default', 'value' => [1 => 'За день', 2 => 'За неделю', 3 => 'За месяц', 4 => 'За все время']],
-            ['period_index', 'default', 'value' => 4],
+            ['period', 'default', 'value' => self::getPeriods()],
+            ['period_index', 'default', 'value' => self::PERIOD_INDEX_ALL],
             ['search', 'default', 'value' => ''],
         ];
     }
@@ -60,16 +65,16 @@ class TasksSearchForm extends Model
      * Получить количество дней для фильтрации заданий по периоду
      *
      */
-    public function getPeriodDays()
+    public function getPeriodDays() : int
     {
         switch ($this->period_index) {
-            case '1':
+            case self::PERIOD_INDEX_DAY:
                 $days = 1;
                 break;
-            case '2':
+            case self::PERIOD_INDEX_WEEK:
                 $days = 7;
                 break;
-            case '3':
+            case self::PERIOD_INDEX_MONTH:
                 $days = 30;
                 break;
             default:
@@ -79,4 +84,17 @@ class TasksSearchForm extends Model
         return $days;
     }
 
+    /**
+     * Получить массив возможных периодов для фильра
+     *
+     */
+    private function getPeriods() : array
+    {
+        return [
+            self::PERIOD_INDEX_DAY => 'За день',
+            self::PERIOD_INDEX_WEEK => 'За неделю',
+            self::PERIOD_INDEX_MONTH => 'За месяц',
+            self::PERIOD_INDEX_ALL => 'За все время'
+        ];
+    }
 }

@@ -39,28 +39,27 @@
             ]);
         ?>
 
-          <fieldset class="search-task__categories">
-            <legend>Категории</legend>
+        <fieldset class="search-task__categories">
+          <legend>Категории</legend>
 
-            <?php $i = 0; ?>
-            <?php foreach ($model->categories_check as $key => $item) { ?>
-                <div>
-                <label class="checkbox__legend">
-                  <?= $form->field($model, "categories_check[$key]", ['template' => "{input}"])->checkbox([
-                     'class' => 'visually-hidden checkbox__input',
-                     'label' => null]
-                    );
-                  ?>
-                    <span><?= $cats[$i]->category ?></span>
-                </label>
-                </div>
-
-            <?php
-                    $i += 1;
-                }
+            <?= $form->field($model, 'categories_check', ['template' => "{input}"])->
+              checkboxList($cats,
+                [
+                  'item' => function ($index, $label, $name, $checked, $value) {
+                              return '
+                                <label class="checkbox__legend">
+                                  <input class="visually-hidden checkbox__input" type="checkbox" name='.$name.
+                                    ' value='.$value.
+                                    (($checked)?" checked":"").
+                                  '>'.
+                                  '<span>'.$label.'</span>
+                                </label>
+                              ';
+                            }
+                ]
+              );
             ?>
-
-          </fieldset>
+        </fieldset>
 
           <fieldset class='search-task__categories'>
                 <legend>Дополнительно</legend>
@@ -82,7 +81,7 @@
                         <span>Удаленная работа</span>
                     </label>
                 </div>
-            </fieldset>
+          </fieldset>
 
             <div class="field-container">
               <label class="search-task__name">Период</label>
@@ -98,7 +97,7 @@
 
               <?= $form->field($model, 'search')->textInput([
                   'class' => "input-middle input",
-                  'type' => 'text'])
+                  'type' => 'search'])
                   ->label($label = false)?>
 
             </div>
