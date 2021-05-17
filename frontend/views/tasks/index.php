@@ -27,60 +27,85 @@
         </div>
     </div>
 </section>
+
 <section class="search-task">
-        <div class="search-task__wrapper">
-          <form class="search-task__form" name="test" method="post" action="#">
-            <fieldset class="search-task__categories">
-              <legend>Категории</legend>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                <span>Курьерские услуги</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="" checked>
-                <span>Грузоперевозки</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Переводы</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Строительство и ремонт</span>
-              </label>
-              <label class="checkbox__legend">
-                <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                <span>Выгул животных</span>
-              </label>
-            </fieldset>
-            <fieldset class="search-task__categories">
-              <legend>Дополнительно</legend>
-              <div>
-                <label class="checkbox__legend">
-                  <input class="visually-hidden checkbox__input" type="checkbox" name="" value="">
-                  <span>Без исполнителя</span>
-                </label>
-              </div>
-              <div>
-                <label class="checkbox__legend">
-                  <input class="visually-hidden checkbox__input" id="7" type="checkbox" name="" value="" checked>
-                  <span>Удаленная работа</span>
-                </label>
-              </div>
-            </fieldset>
+    <div class="search-task__wrapper">
+        <?php
+            use yii\widgets\ActiveForm;
+
+            $form = ActiveForm::begin([
+                'id' => 'search_tasks_id',
+                'options' => ['class' => 'search-task__form', 'name' => 'search_tasks', 'method' => 'post', 'action' => "#"]
+            ]);
+        ?>
+
+        <fieldset class="search-task__categories">
+          <legend>Категории</legend>
+
+            <?= $form->field($model, 'categories_check', ['template' => "{input}"])->
+              checkboxList($cats,
+                [
+                  'item' => function ($index, $label, $name, $checked, $value) {
+                              return '
+                                <label class="checkbox__legend">
+                                  <input class="visually-hidden checkbox__input" type="checkbox" name='.$name.
+                                    ' value='.$value.
+                                    (($checked)?" checked":"").
+                                  '>'.
+                                  '<span>'.$label.'</span>
+                                </label>
+                              ';
+                            }
+                ]
+              );
+            ?>
+        </fieldset>
+
+          <fieldset class='search-task__categories'>
+                <legend>Дополнительно</legend>
+                <div>
+                    <label class="checkbox__legend">
+                        <?= $form->field($model, 'nobuilder')->checkbox([
+                            'class' => 'visually-hidden checkbox__input',
+                            'label' => null]
+                            ); ?>
+                        <span>Без исполнителя</span>
+                    </label>
+                </div>
+                <div>
+                    <label class="checkbox__legend">
+                        <?= $form->field($model, 'remote_work')->checkbox([
+                            'class' => 'visually-hidden checkbox__input',
+                            'label' => null]
+                            ); ?>
+                        <span>Удаленная работа</span>
+                    </label>
+                </div>
+          </fieldset>
+
             <div class="field-container">
-              <label class="search-task__name" for="8">Период</label>
-              <select class="multiple-select input" id="8" size="1" name="time[]">
-                <option value="day">За день</option>
-                <option selected value="week">За неделю</option>
-                <option value="month">За месяц</option>
-              </select>
+              <label class="search-task__name">Период</label>
+
+              <?= $form->field($model, 'period_index')->dropDownList($model->period, [
+                  'class' => 'multiple-select input'])
+                  ->label($label = false)?>
+
             </div>
+
             <div class="field-container">
-              <label class="search-task__name" for="9">Поиск по названию</label>
-              <input class="input-middle input" id="9" type="search" name="q" placeholder="">
+              <label class="search-task__name">Поиск по названию</label>
+
+              <?= $form->field($model, 'search')->textInput([
+                  'class' => "input-middle input",
+                  'type' => 'search'])
+                  ->label($label = false)?>
+
             </div>
+
             <button class="button" type="submit">Искать</button>
-          </form>
-        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
+
 </section>

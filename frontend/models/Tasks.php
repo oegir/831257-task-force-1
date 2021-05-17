@@ -159,6 +159,8 @@ class Tasks extends \yii\db\ActiveRecord
      */
     public function getPeriodCreate() : string
     {
-        return Yii::$app->formatter->asRelativeTime($this->date_add);
+        $date = new \DateTime($this->date_add);
+
+        return Yii::$app->formatter->asRelativeTime($date);
     }
 }

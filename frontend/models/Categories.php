@@ -66,4 +66,14 @@ class Categories extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Tasks::className(), ['category_id' => 'id']);
     }
+
+    /**
+     * получение массива категорий вида ['id категории' => 'Наименование категории', ...]
+     *
+     * @return array
+     */
+    public static function getCategoriesList() : array
+    {
+        return yii\helpers\ArrayHelper::map(Categories::find()->all(), 'id', 'category');
+    }
 }
