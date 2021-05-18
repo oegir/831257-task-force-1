@@ -32,6 +32,7 @@
     <div class="search-task__wrapper">
         <?php
             use yii\widgets\ActiveForm;
+            use \yii\helpers\Html;
 
             $form = ActiveForm::begin([
                 'id' => 'search_tasks_id',
@@ -46,63 +47,58 @@
               checkboxList($cats,
                 [
                   'item' => function ($index, $label, $name, $checked, $value) {
-                              return '
-                                <label class="checkbox__legend">
-                                  <input class="visually-hidden checkbox__input" type="checkbox" name='.$name.
-                                    ' value='.$value.
-                                    (($checked)?" checked":"").
-                                  '>'.
-                                  '<span>'.$label.'</span>
-                                </label>
-                              ';
-                            }
+                    return Html::checkbox($name, $checked, [
+                        'value' => $value,
+                        'label' => '<span>' . $label .'</span>',
+                        'class' => 'visually-hidden checkbox__input',
+                        'labelOptions' => [
+                            'class' => 'checkbox__legend',
+                        ],
+                    ]);
+                  }
                 ]
               );
             ?>
         </fieldset>
 
-          <fieldset class='search-task__categories'>
-                <legend>Дополнительно</legend>
-                <div>
-                    <label class="checkbox__legend">
-                        <?= $form->field($model, 'nobuilder')->checkbox([
-                            'class' => 'visually-hidden checkbox__input',
-                            'label' => null]
-                            ); ?>
-                        <span>Без исполнителя</span>
-                    </label>
-                </div>
-                <div>
-                    <label class="checkbox__legend">
-                        <?= $form->field($model, 'remote_work')->checkbox([
-                            'class' => 'visually-hidden checkbox__input',
-                            'label' => null]
-                            ); ?>
-                        <span>Удаленная работа</span>
-                    </label>
-                </div>
+        <fieldset class='search-task__categories'>
+          <legend>Дополнительно</legend>
+          <div>
+            <?= $form->field($model, 'nobuilder')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>Без исполнителя</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+           </div>
+           <div>
+            <?= $form->field($model, 'remote_work')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>Удаленная работа</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+           </div>
           </fieldset>
 
-            <div class="field-container">
-              <label class="search-task__name">Период</label>
+          <div class="field-container">
+            <label class="search-task__name">Период</label>
+            <?= $form->field($model, 'period_index')->dropDownList($model->period, [
+                'class' => 'multiple-select input'])
+            ->label($label = false)?>
+          </div>
 
-              <?= $form->field($model, 'period_index')->dropDownList($model->period, [
-                  'class' => 'multiple-select input'])
-                  ->label($label = false)?>
+          <div class="field-container">
+            <label class="search-task__name">Поиск по названию</label>
+            <?= $form->field($model, 'search')->textInput([
+                'class' => "input-middle input",
+                'type' => 'search'])
+                ->label($label = false)?>
+          </div>
 
-            </div>
-
-            <div class="field-container">
-              <label class="search-task__name">Поиск по названию</label>
-
-              <?= $form->field($model, 'search')->textInput([
-                  'class' => "input-middle input",
-                  'type' => 'search'])
-                  ->label($label = false)?>
-
-            </div>
-
-            <button class="button" type="submit">Искать</button>
+          <button class="button" type="submit">Искать</button>
 
         <?php ActiveForm::end(); ?>
 

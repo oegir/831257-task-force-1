@@ -72,58 +72,55 @@
             ?>
         </fieldset>
 
-          <fieldset class='search-task__categories'>
-            <legend>Дополнительно</legend>
-            <div>
-                <label class="checkbox__legend">
-                    <?= $form->field($model, 'free')->checkbox([
-                        'class' => 'visually-hidden checkbox__input',
-                        'label' => null
-                        ]
-                        ); ?>
-                    <span>Сейчас свободен</span>
-                </label>
-            </div>
-            <div>
-                <label class="checkbox__legend">
-                    <?= $form->field($model, 'online')->checkbox([
-                        'class' => 'visually-hidden checkbox__input',
-                        'label' => null]
-                        ); ?>
-                    <span>Сейчас онлайн</span>
-                </label>
-            </div>
-            <div>
-                <label class="checkbox__legend">
-                    <?= $form->field($model, 'reviews')->checkbox([
-                        'class' => 'visually-hidden checkbox__input',
-                        'label' => null]
-                        ); ?>
-                    <span>Есть отзывы</span>
-                </label>
-            </div>
-            <div>
-                <label class="checkbox__legend">
-                    <?= $form->field($model, 'chosen')->checkbox([
-                        'class' => 'visually-hidden checkbox__input',
-                        'label' => null]
-                        ); ?>
-                    <span>В избранном</span>
-                </label>
-            </div>
-          </fieldset>
+        <fieldset class='search-task__categories'>
+          <legend>Дополнительно</legend>
+          <div>
+            <?= $form->field($model, 'free')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>Сейчас свободен</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+          </div>
+          <div>
+            <?= $form->field($model, 'online')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>Сейчас онлайн</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+          </div>
+          <div>
+            <?= $form->field($model, 'reviews')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>Есть отзывы</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+          </div>
+          <div>
+            <?= $form->field($model, 'chosen')->checkbox([
+                  'class' => 'visually-hidden checkbox__input',
+                  'label' => '<span>В избранном</span>',
+                  'labelOptions' => ['class' => 'checkbox__legend']
+                  ]
+                );
+            ?>
+          </div>
+        </fieldset>
 
-            <div class="field-container">
-              <label class="search-task__name">Поиск по имени</label>
+        <div class="field-container">
+            <label class="search-task__name">Поиск по названию</label>
+            <?= $form->field($model, 'search')->textInput([
+                'class' => "input-middle input",
+                'type' => 'search'])
+                ->label($label = false)?>
+          </div>
 
-              <?= $form->field($model, 'search')->textInput([
-                  'class' => "input-middle input",
-                  'type' => 'search'])
-                  ->label($label = false)?>
-
-            </div>
-
-            <button class="button" type="submit">Искать</button>
+          <button class="button" type="submit">Искать</button>
 
         <?php ActiveForm::end(); ?>
 
