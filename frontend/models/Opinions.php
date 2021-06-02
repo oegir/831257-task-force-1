@@ -76,7 +76,7 @@ class Opinions extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getBuilder()
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }

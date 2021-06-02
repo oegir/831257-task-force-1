@@ -7,22 +7,29 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
-use frontend\assets\AppAsset;
+use frontend\assets\MainAsset;
 use common\widgets\Alert;
 
-AppAsset::register($this);
+MainAsset::register($this);
+
 ?>
+
 <?php $this->beginPage() ?>
 
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+<?php $this->head();?>
+
     <meta charset="UTF-8">
     <title>TaskForce</title>
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
+<!--    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">-->
 </head>
+
 <body>
+<?php $this->beginBody() ?>
+
 <div class="table-layout">
     <header class="page-header">
         <div class="main-container page-header__container">

@@ -153,14 +153,22 @@ class Tasks extends \yii\db\ActiveRecord
     }
 
     /**
-     * Получить интервал между датой создания задания и текущей датой
+     * Получить интервал между датой создания задания и текущей датой, вида "2 месяца назад"
+     *
+     * @param bool $ending Нужно ли возвращать в конце строки слово "назад"
      *
      * @return string
      */
-    public function getPeriodCreate() : string
+    public function getPeriodCreate(bool $ending = true) : string
     {
-        $date = new \DateTime($this->date_add);
+        // в БД дата хранится в UTC
+        $tz = new \DateTimeZone('UTC');
 
-        return Yii::$app->formatter->asRelativeTime($date);
+        // дата в текущем времени сервера
+        $date = new \DateTime($this->date_add, $tz);
+
+        $interval = Yii::$app->formatter->asRelativeTime($date);
+
+        return $ending ? $interval : mb_substr($interval, 0, mb_strlen($interval) - 6);
     }
 }
