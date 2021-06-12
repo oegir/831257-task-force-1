@@ -149,7 +149,7 @@ class Users extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getOpinions0()
+    public function getOpinionsAuthor()
     {
         return $this->hasMany(Opinions::className(), ['review_author_id' => 'id']);
     }
@@ -215,16 +215,69 @@ class Users extends \yii\db\ActiveRecord
     }
 
     /**
+     * Gets query for [[Skills]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSkills()
+    {
+        return $this->hasMany(Skills::className(), ['user_id' => 'id']);
+    }
+
+    /**
      * Получить интервал между датой последней активности пользователя и текущей датой
      *
      * @return string
      */
     public function getPeriodLastVizit() : string
     {
+        // в БД дата хранится в UTC
+        $tz = new \DateTimeZone('UTC');
+
         $date_last = is_null($this->last_activity) ? $this->date_add : $this->last_activity;
 
-        $date = new \DateTime($date_last);
+        $date = new \DateTime($date_last, $tz);
 
-        return Yii::$app->formatter->asRelativeTime($date);
+        $interval = Yii::$app->formatter->asRelativeTime($date);
+
+        return $interval;
+    }
+
+    /**
+     * Получить интервал между датой регистрации пользователя и текущей датой, вида "2 месяца назад"
+     *
+     * @param bool $ending Нужно ли возвращать в конце строки слово "назад"
+     *
+     * @return string
+     */
+    public function getPeriodCreate(bool $ending = true) : string
+    {
+        // в БД дата хранится в UTC
+        $tz = new \DateTimeZone('UTC');
+
+        $date = new \DateTime($this->date_add, $tz);
+
+        $interval = Yii::$app->formatter->asRelativeTime($date);
+
+        return $ending ? $interval : mb_substr($interval, 0, mb_strlen($interval) - 6);
+    }
+
+    /**
+     * Получить возраст пользователя
+     *
+     * @return string
+     */
+    public function getAge() : string
+    {
+        // в БД дата хранится в UTC
+        $tz = new \DateTimeZone('UTC');
+
+        $date = new \DateTime($this->birthday, $tz);
+
+        $date_now = new \DateTime();
+
+        $interval=$date->diff($date_now);
+
+        return $interval->y;
     }
 }
