@@ -19,10 +19,9 @@ class UsersController extends Controller
         $cats = Categories::getCategoriesList();
 
         $model_form = new UsersSearchForm();
-
-        $model_form->validate();
-
+        // Сначала данные загружаются в модель, потом валидируются
         $model_form->load(Yii::$app->request->post());
+        $model_form->validate();
 
         //формирование запроса
         $query = Users::find()

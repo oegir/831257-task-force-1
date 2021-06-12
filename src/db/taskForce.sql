@@ -14,13 +14,13 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 -- -----------------------------------------------------
 -- Schema task_force
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `task_force` DEFAULT CHARACTER SET utf8 ;
-USE `task_force` ;
+-- CREATE SCHEMA `IF NOT EXISTS `task_force` DEFAULT CHARACTER SET utf8 ;
+USE `shkarov` ;
 
 -- -----------------------------------------------------
--- Table `task_force`.`cities`
+-- Table `cities`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`cities` (
+CREATE TABLE IF NOT EXISTS `cities` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `city` VARCHAR(70) NOT NULL COMMENT 'Населенный пункт',
   `latitude` VARCHAR(15) NULL DEFAULT '' COMMENT 'Широта',
@@ -32,9 +32,9 @@ COMMENT = 'Населенные пункты и их координаты';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`users`
+-- Table `users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `email` VARCHAR(320) NOT NULL COMMENT 'Электронная почта',
   `login` VARCHAR(70) NOT NULL COMMENT 'Логин',
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `task_force`.`users` (
   UNIQUE INDEX `id_UNIQUE` (`id` ASC),
   CONSTRAINT `fk_users_cities`
     FOREIGN KEY (`city_id`)
-    REFERENCES `task_force`.`cities` (`id`)
+    REFERENCES `cities` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -69,9 +69,9 @@ COMMENT = 'Пользователи';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`categories`
+-- Table `categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`categories` (
+CREATE TABLE IF NOT EXISTS `categories` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `category` VARCHAR(70) NOT NULL COMMENT 'Наименование категории',
   `icon` VARCHAR(70) NULL DEFAULT NULL COMMENT 'Иконка',
@@ -82,9 +82,9 @@ COMMENT = 'Категории заданий';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`photos`
+-- Table `photos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`photos` (
+CREATE TABLE IF NOT EXISTS `photos` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id` INT UNSIGNED NOT NULL COMMENT 'user id ',
   `name` VARCHAR(70) NULL COMMENT 'Название фото',
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `task_force`.`photos` (
   INDEX `fk_photos_users_idx` (`user_id` ASC),
   CONSTRAINT `fk_photos_users`
     FOREIGN KEY (`user_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -101,9 +101,9 @@ COMMENT = 'Фотографии выполненных работ исполни
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`tasks`
+-- Table `tasks`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`tasks` (
+CREATE TABLE IF NOT EXISTS `tasks` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `date_add` DATETIME NULL COMMENT 'Дата добавления',
   `customer_id` INT UNSIGNED NOT NULL COMMENT 'id заказчика',
@@ -124,17 +124,17 @@ CREATE TABLE IF NOT EXISTS `task_force`.`tasks` (
   INDEX `fk_tasks_categories_idx` (`category_id` ASC),
   CONSTRAINT `fk_tasks_users1`
     FOREIGN KEY (`customer_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_users2`
     FOREIGN KEY (`builder_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_tasks_categories`
     FOREIGN KEY (`category_id`)
-    REFERENCES `task_force`.`categories` (`id`)
+    REFERENCES `categories` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -142,9 +142,9 @@ COMMENT = 'Задания';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`files`
+-- Table `files`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`files` (
+CREATE TABLE IF NOT EXISTS `files` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `task_id` INT UNSIGNED NOT NULL COMMENT 'id задания',
   PRIMARY KEY (`id`),
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `task_force`.`files` (
   INDEX `fk_files_tasks_idx` (`task_id` ASC),
   CONSTRAINT `fk_files_tasks`
     FOREIGN KEY (`task_id`)
-    REFERENCES `task_force`.`tasks` (`id`)
+    REFERENCES `tasks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -160,9 +160,9 @@ COMMENT = 'Файлы заданий';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`responses`
+-- Table `responses`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`responses` (
+CREATE TABLE IF NOT EXISTS `responses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `date_add` DATETIME NULL COMMENT 'Дата добавления',
   `task_id` INT UNSIGNED NOT NULL COMMENT 'id задания',
@@ -175,12 +175,12 @@ CREATE TABLE IF NOT EXISTS `task_force`.`responses` (
   INDEX `fk_responses_users_idx` (`user_id` ASC),
   CONSTRAINT `fk_responses_tasks`
     FOREIGN KEY (`task_id`)
-    REFERENCES `task_force`.`tasks` (`id`)
+    REFERENCES `tasks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_responses_users`
     FOREIGN KEY (`user_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -188,9 +188,9 @@ COMMENT = 'Отклики на задания';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`favorites`
+-- Table `favorites`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`favorites` (
+CREATE TABLE IF NOT EXISTS `favorites` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id_customer` INT UNSIGNED NOT NULL COMMENT 'id заказчика',
   `user_id_builder` INT UNSIGNED NOT NULL COMMENT 'id исполнителя',
@@ -200,12 +200,12 @@ CREATE TABLE IF NOT EXISTS `task_force`.`favorites` (
   INDEX `fk_favorites_users2_idx` (`user_id_builder` ASC),
   CONSTRAINT `fk_favorites_users1`
     FOREIGN KEY (`user_id_customer`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_favorites_users2`
     FOREIGN KEY (`user_id_builder`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -213,9 +213,9 @@ COMMENT = 'Избранные исполнители';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`messages`
+-- Table `messages`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`messages` (
+CREATE TABLE IF NOT EXISTS `messages` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `task_id` INT UNSIGNED NOT NULL COMMENT 'id задания',
   `user_id` INT UNSIGNED NOT NULL COMMENT 'id пользователя',
@@ -227,12 +227,12 @@ CREATE TABLE IF NOT EXISTS `task_force`.`messages` (
   INDEX `fk_messages_users_idx` (`user_id` ASC),
   CONSTRAINT `fk_messages_tasks`
     FOREIGN KEY (`task_id`)
-    REFERENCES `task_force`.`tasks` (`id`)
+    REFERENCES `tasks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_messages_users`
     FOREIGN KEY (`user_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -240,9 +240,9 @@ COMMENT = 'Сообщения пользователей';
 
 
 -- -----------------------------------------------------
--- Table `task_force`.`opinions`
+-- Table `opinions`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `task_force`.`opinions` (
+CREATE TABLE IF NOT EXISTS `opinions` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `user_id` INT UNSIGNED NOT NULL COMMENT 'id исполнителя',
   `task_id` INT UNSIGNED NOT NULL COMMENT 'id задания',
@@ -257,17 +257,17 @@ CREATE TABLE IF NOT EXISTS `task_force`.`opinions` (
   INDEX `fk_opinions_users2_idx` (`review_author_id` ASC),
   CONSTRAINT `fk_opinions_users1`
     FOREIGN KEY (`user_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_opinions_tasks`
     FOREIGN KEY (`task_id`)
-    REFERENCES `task_force`.`tasks` (`id`)
+    REFERENCES `tasks` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_opinions_users2`
     FOREIGN KEY (`review_author_id`)
-    REFERENCES `task_force`.`users` (`id`)
+    REFERENCES `users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
